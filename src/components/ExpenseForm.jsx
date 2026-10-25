@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CATEGORIES } from "../constants";
 
-function getEmptyForm() {
+function emptyForm() {
     return {
         title: "",
         amount: "",
@@ -10,8 +10,9 @@ function getEmptyForm() {
     };
 }
 
-export default function ExpenseForm({ onAdd }) {
-    const [form, setForm] = useState(getEmptyForm);
+export default function ExpenseForm({ initial, onSave, onCancel }) {
+    const isEditing = Boolean(initial);
+    const [form, setForm] = useState(initial ?? emptyForm());
     const [errors, setErrors] = useState({});
 
     function update(field, value) {
@@ -35,17 +36,19 @@ export default function ExpenseForm({ onAdd }) {
         setErrors(next);
         if (Object.keys(next).length > 0) return;
 
-        onAdd({
-            id: crypto.randomUUID(),
+        onSave({
+            id: initial?.id ?? crypto.randomUUID(),
             title: form.title.trim(),
             amount: Number(form.amount),
             category: form.category,
             date: form.date,
         });
 
-        // Clear the fields but keep the date and category for quick repeat entries
-        setForm((prev) => ({ ...getEmptyForm(), date: prev.date, category: prev.category }));
-        setErrors({});
+        if (!isEditing) {
+            // Clear the text fields but keep date and category for quick repeat entries
+            setForm((prev) => ({ ...prev, title: "", amount: "" }));
+            setErrors({});
+        }
     }
 
     return (
@@ -99,7 +102,16 @@ export default function ExpenseForm({ onAdd }) {
                 {errors.date && <span className="error">{errors.date}</span>}
             </div>
 
-            <button type="submit" className="primary">Add expense</button>
+            <div className="form-actions">
+                <button type="submit" className="primary">
+                    {isEditing ? "Save changes" : "Add expense"}
+                </button>
+                {isEditing && (
+                    <button type="button" className="ghost" onClick={onCancel}>
+                        Cancel
+                    </button>
+                )}
+            </div>
         </form>
     );
 }

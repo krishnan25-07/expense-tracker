@@ -1,6 +1,6 @@
-const formatter = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
+export default function ExpenseList({ expenses, onEdit, onDelete }) {
+    const formatter = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
 
-export default function ExpenseList({ expenses, onDelete }) {
     if (expenses.length === 0) {
         return <p className="muted empty">No expenses yet. Add one above.</p>;
     }
@@ -17,6 +17,9 @@ export default function ExpenseList({ expenses, onDelete }) {
                     </div>
                     <div className="expense-right">
                         <span>{formatter.format(expense.amount)}</span>
+                        <button className="edit" onClick={() => onEdit(expense)}>
+                            Edit
+                        </button>
                         <button
                             className="delete"
                             onClick={() => onDelete(expense.id)}

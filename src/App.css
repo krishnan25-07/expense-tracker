@@ -161,3 +161,31 @@ button {
         grid-template-columns: 1fr;
     }
 }
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.form-actions .primary {
+    flex: 1;
+}
+
+.ghost {
+    padding: 0.7rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    color: #334155;
+    cursor: pointer;
+}
+
+.edit {
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 6px;
+    background: #e0f2fe;
+    color: #0369a1;
+    cursor: pointer;
+}
